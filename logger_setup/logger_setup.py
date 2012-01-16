@@ -3,7 +3,6 @@ from os.path import join
 from os import getpid
 
 MESSAGE_FORMAT = "%(levelname)s %(asctime)s %(name)s: %(message)s"
-CONSOLE_LOGGING_LEVEL = logging.INFO
 
 try:
  logger
@@ -22,7 +21,7 @@ def create_handler(filename=None, level=logging.DEBUG, handler_class=logging.Fil
  logger.addHandler(handler)
  return handler
 
-def setup_logging(console=True, error_log=None, debug_log=None):
+def setup_logging(console_level=logging.INFO, error_log=None, debug_log=None):
  logger.setLevel(logging.DEBUG)
  if error_log:
   create_handler(error_log, logging.ERROR)
