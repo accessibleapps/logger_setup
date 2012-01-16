@@ -31,6 +31,7 @@ def setup_logging(console=True, error_log=None, debug_log=None):
  if console:
   console_handler = create_handler(level=CONSOLE_LOGGING_LEVEL, handler_class=logging.StreamHandler)
  logger.getChild('logger_setup').info("Logging initialized. PID: %d" % getpid())
+ return logger
 
 def shutdown():
  logging.shutdown()
