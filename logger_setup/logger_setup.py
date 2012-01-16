@@ -27,8 +27,8 @@ def setup_logging(console_level=logging.INFO, error_log=None, debug_log=None):
   create_handler(error_log, logging.ERROR)
  if debug_log:
   create_handler(debug_log, logging.DEBUG)
- if console:
-  console_handler = create_handler(level=CONSOLE_LOGGING_LEVEL, handler_class=logging.StreamHandler)
+ if console_level:
+  console_handler = create_handler(level=console_level, handler_class=logging.StreamHandler)
  logger.getChild('logger_setup').info("Logging initialized. PID: %d" % getpid())
  return logger
 
