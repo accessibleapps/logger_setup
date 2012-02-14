@@ -1,6 +1,8 @@
 import logging
+import sys
 from os.path import join
 from os import getpid
+from traceback import format_exception
 
 MESSAGE_FORMAT = "%(levelname)s %(asctime)s %(name)s: %(message)s"
 
@@ -21,7 +23,16 @@ def create_handler(filename=None, level=logging.DEBUG, handler_class=logging.Fil
  logger.addHandler(handler)
  return handler
 
-def setup_logging(console_level=logging.INFO, error_log=None, debug_log=None):
+def custom_excepthook(type, value, traceback):
+ tb = format_exception(type, value, traceback)
+ tb = "".join(tb)
+ logger.error("An unhandled exception occurred.\n%s" % tb)
+ sys.__excepthook__(type, value, traceback)
+
+
+def setup_logging(console_level=logging.INFO, error_log=None, debug_log=None, log_unhandled_exceptions=True):
+ if log_unhandled_exceptions:
+  sys.excepthook = custom_excepthook
  logger.setLevel(logging.DEBUG)
  if error_log:
   create_handler(error_log, logging.ERROR)
