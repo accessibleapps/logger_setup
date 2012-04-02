@@ -8,12 +8,10 @@ MESSAGE_FORMAT = "%(levelname)s %(asctime)s %(name)s: %(message)s"
 
 try:
  logger
- formatter
 except NameError:
  logger = logging.getLogger()
- formatter = logging.Formatter(MESSAGE_FORMAT)
-
-def create_handler(filename=None, level=logging.DEBUG, handler_class=logging.FileHandler):
+ 
+def create_handler(filename=None, level=logging.DEBUG, handler_class=logging.FileHandler, formatter=None):
  if filename is None:
   handler = handler_class()
  else:
@@ -30,16 +28,17 @@ def custom_excepthook(type, value, traceback):
  sys.__excepthook__(type, value, traceback)
 
 
-def setup_logging(console_level=logging.INFO, error_log=None, debug_log=None, log_unhandled_exceptions=True):
+def setup_logging(console_level=logging.INFO, error_log=None, debug_log=None, message_format=MESSAGE_FORMAT, log_unhandled_exceptions=True):
  if log_unhandled_exceptions:
   sys.excepthook = custom_excepthook
  logger.setLevel(logging.DEBUG)
+ formatter = logging.Formatter(message_format)
  if error_log:
-  create_handler(error_log, logging.ERROR)
+  create_handler(error_log, logging.ERROR, formatter=formatter)
  if debug_log:
-  create_handler(debug_log, logging.DEBUG)
+  create_handler(debug_log, logging.DEBUG, formatter=formatter)
  if console_level:
-  console_handler = create_handler(level=console_level, handler_class=logging.StreamHandler)
+  console_handler = create_handler(level=console_level, handler_class=logging.StreamHandler, formatter=formatter)
  logger.getChild('logger_setup').info("Logging initialized. PID: %d" % getpid())
  return logger
 
