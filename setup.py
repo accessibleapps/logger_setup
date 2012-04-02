@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-__version__ = 0.02
+__version__ = 0.021
 __doc__ = """Collects log setup and handling from all projects into one central place."""
 __author__ = 'Q'
 
