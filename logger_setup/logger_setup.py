@@ -39,7 +39,7 @@ def setup_logging(console_level=logging.INFO, error_log=None, debug_log=None, me
   create_handler(debug_log, logging.DEBUG, formatter=formatter)
  if console_level:
   console_handler = create_handler(level=console_level, handler_class=logging.StreamHandler, formatter=formatter)
- logger.getChild('logger_setup').info("Logging initialized. PID: %d" % getpid())
+ logger.info("Logging initialized. PID: %d" % getpid())
  return logger
 
 def shutdown():
