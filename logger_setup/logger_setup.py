@@ -1,8 +1,9 @@
 import logging
 import sys
-from os.path import join
-from os import getpid
-from traceback import format_exception
+import os
+import traceback
+
+import crashlogger
 
 MESSAGE_FORMAT = "%(levelname)s %(asctime)s %(name)s: %(message)s"
 
@@ -27,19 +28,20 @@ def custom_excepthook(type, value, traceback):
  logger.error("An unhandled exception occurred.\n%s" % tb)
  sys.__excepthook__(type, value, traceback)
 
-
-def setup_logging(console_level=logging.INFO, error_log=None, debug_log=None, message_format=MESSAGE_FORMAT, log_unhandled_exceptions=True):
+def setup_logging(console_level=logging.INFO, error_log=None, debug_log=None, message_format=MESSAGE_FORMAT, log_unhandled_exceptions=True, log_crashes=True):
  if log_unhandled_exceptions:
   sys.excepthook = custom_excepthook
  logger.setLevel(logging.DEBUG)
  formatter = logging.Formatter(message_format)
  if error_log:
-  create_handler(error_log, logging.ERROR, formatter=formatter)
+  error_handler = create_handler(error_log, logging.ERROR, formatter=formatter)
  if debug_log:
   create_handler(debug_log, logging.DEBUG, formatter=formatter)
  if console_level:
   console_handler = create_handler(level=console_level, handler_class=logging.StreamHandler, formatter=formatter)
- logger.info("Logging initialized. PID: %d" % getpid())
+ if error_log and log_crashes:
+  crashlogger.enable_crashlogger(error_handler)
+ logger.info("Logging initialized. PID: %d" % os.getpid())
  return logger
 
 def shutdown():

@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-__version__ = 0.021
+__version__ = 0.03
 __doc__ = """Collects log setup and handling from all projects into one central place."""
 __author__ = 'Q'
 
@@ -12,6 +12,9 @@ setup(
  description = __doc__,
  package_dir = {'logger_setup': 'logger_setup'},
  packages = find_packages(),
+ install_requires = [
+  'faulthandler',
+ ],
  classifiers = [
   'Development Status :: 3 - Alpha',
   'Intended Audience :: Developers',
