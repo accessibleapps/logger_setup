@@ -5,7 +5,7 @@ __doc__ = """Collects log setup and handling from all projects into one central 
 __author__ = 'Q'
 
 setup(
- name = u'logger_setup',
+ name = 'logger_setup',
  version = __version__,
  author = __author__,
  author_email = 'q@q-continuum.net',
