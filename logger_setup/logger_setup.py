@@ -22,11 +22,11 @@ def create_handler(filename=None, level=logging.DEBUG, handler_class=logging.Fil
  logger.addHandler(handler)
  return handler
 
-def custom_excepthook(type, value, traceback):
- tb = traceback.format_exception(type, value, traceback)
+def custom_excepthook(type, value, thrown_traceback):
+ tb = traceback.format_exception(type, value, thrown_traceback)
  tb = "".join(tb)
  logger.error("An unhandled exception occurred.\n%s" % tb)
- sys.__excepthook__(type, value, traceback)
+ sys.__excepthook__(type, value, thrown_traceback)
 
 def setup_logging(console_level=logging.INFO, error_log=None, debug_log=None, message_format=MESSAGE_FORMAT, log_unhandled_exceptions=True, log_crashes=True):
  if log_unhandled_exceptions:
