@@ -23,7 +23,7 @@ def create_handler(filename=None, level=logging.DEBUG, handler_class=logging.Fil
  return handler
 
 def custom_excepthook(type, value, traceback):
- tb = format_exception(type, value, traceback)
+ tb = traceback.format_exception(type, value, traceback)
  tb = "".join(tb)
  logger.error("An unhandled exception occurred.\n%s" % tb)
  sys.__excepthook__(type, value, traceback)
