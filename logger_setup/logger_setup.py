@@ -12,11 +12,11 @@ try:
 except NameError:
  logger = logging.getLogger()
  
-def create_handler(filename=None, level=logging.DEBUG, handler_class=logging.FileHandler, formatter=None):
+def create_handler(filename=None, level=logging.DEBUG, handler_class=logging.FileHandler, handler_mode='w', formatter=None):
  if filename is None:
   handler = handler_class()
  else:
-  handler = handler_class(filename)
+  handler = handler_class(filename, mode=handler_mode)
  handler.setLevel(level)
  handler.setFormatter(formatter)
  logger.addHandler(handler)
