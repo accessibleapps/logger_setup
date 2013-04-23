@@ -5,7 +5,7 @@ import traceback
 
 import crashlogger
 
-MESSAGE_FORMAT = "%(levelname)s %(asctime)s %(name)s: %(message)s"
+MESSAGE_FORMAT = "%(levelname)s %(name)s thread %(thread)d %(module)s.%(funcName)s %(asctime)s:\n%(message)s"
 
 try:
  logger
