@@ -1,4 +1,9 @@
+import sys
 from setuptools import setup, find_packages
+
+install_requires = []
+if sys.version_info[0] < 3:
+ install_requires.append('faulthandler')
 
 __version__ = 0.1
 __doc__ = """Collects log setup and handling from all projects into one central place."""
@@ -12,9 +17,7 @@ setup(
  description = __doc__,
  package_dir = {'logger_setup': 'logger_setup'},
  packages = find_packages(),
- install_requires = [
-  'faulthandler',
- ],
+ install_requires = install_requires,
  classifiers = [
   'Development Status :: 3 - Alpha',
   'Intended Audience :: Developers',
