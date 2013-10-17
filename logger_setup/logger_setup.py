@@ -34,7 +34,7 @@ def setup_logging(console_level=logging.INFO, error_log=None, debug_log=None, me
  logger.setLevel(logging.DEBUG)
  formatter = logging.Formatter(message_format)
  if error_log:
-  error_handler = create_handler(error_log, logging.ERROR, formatter=formatter)
+  error_handler = create_handler(error_log, logging.WARNING, formatter=formatter)
  if debug_log:
   create_handler(debug_log, logging.DEBUG, formatter=formatter)
  if console_level:
