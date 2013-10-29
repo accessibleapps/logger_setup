@@ -32,7 +32,7 @@ def custom_excepthook(type, value, thrown_traceback):
  logger.error("An unhandled exception occurred.\n%s" % tb)
  sys.__excepthook__(type, value, thrown_traceback)
 
-def setup_logging(console_level=logging.INFO, error_log=None, debug_log=None, message_format=MESSAGE_FORMAT, log_unhandled_exceptions=True, log_crashes=True, remote_address=None):
+def setup_logging(console_level=logging.INFO, error_log=None, debug_log=None, message_format=MESSAGE_FORMAT, log_unhandled_exceptions=True, log_crashes=True, application_name=None, remote_address=None):
  if log_unhandled_exceptions:
   sys.excepthook = custom_excepthook
  logger.setLevel(logging.DEBUG)
@@ -45,11 +45,11 @@ def setup_logging(console_level=logging.INFO, error_log=None, debug_log=None, me
   console_handler = create_handler(level=console_level, handler_class=logging.StreamHandler, formatter=formatter)
  if error_log and log_crashes:
   crashlogger.enable_crashlogger(error_handler)
- remote_format = "1 %(asctime)s - appname - - %(name)s thread %(thread)d %(module)s.%(funcName)s:\n%(message)s"
+ remote_format = "1 %(asctime)s - " + application_name + " - - %(name)s thread %(thread)d %(module)s.%(funcName)s:\n%(message)s"
  remote_date_format = '%Y-%m-%dT%I:%M:%SZ'
  if remote_address:
   remote_handler = logging.handlers.SysLogHandler(address=remote_address)
-  remote_handler.setLevel(logging.DEBUG)
+  remote_handler.setLevel(logging.WARNING)
   remote_formatter = logging.Formatter(remote_format, datefmt=remote_date_format)
   remote_handler.setFormatter(remote_formatter)
   logger.addHandler(remote_handler)
