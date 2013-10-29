@@ -46,7 +46,7 @@ def setup_logging(console_level=logging.INFO, error_log=None, debug_log=None, me
  if error_log and log_crashes:
   crashlogger.enable_crashlogger(error_handler)
  remote_format = "1 %(asctime)s - " + application_name + " - - %(name)s thread %(thread)d %(module)s.%(funcName)s:\n%(message)s"
- remote_date_format = '%Y-%m-%dT%I:%M:%SZ'
+ remote_date_format = '%Y-%m-%dT%H:%M:%SZ'
  if remote_address:
   remote_handler = logging.handlers.SysLogHandler(address=remote_address)
   remote_handler.setLevel(logging.WARNING)
