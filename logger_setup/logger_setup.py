@@ -8,6 +8,9 @@ import crashlogger
 
 MESSAGE_FORMAT = "%(levelname)s %(name)s thread %(thread)d %(module)s.%(funcName)s %(asctime)s:\n%(message)s"
 
+
+
+
 try:
  logger
 except NameError:
@@ -42,10 +45,13 @@ def setup_logging(console_level=logging.INFO, error_log=None, debug_log=None, me
   console_handler = create_handler(level=console_level, handler_class=logging.StreamHandler, formatter=formatter)
  if error_log and log_crashes:
   crashlogger.enable_crashlogger(error_handler)
+ remote_format = "1 %(asctime)s - appname - - %(name)s thread %(thread)d %(module)s.%(funcName)s:\n%(message)s"
+ remote_date_format = '%Y-%m-%dT%I:%M:%SZ'
  if remote_address:
-  remote_handler = logging.handlers.SysLogHandler(address=remote_address))
-  remote_handler.setLevel(logging.WARNING)
-  remote_handler.setFormatter(formatter)
+  remote_handler = logging.handlers.SysLogHandler(address=remote_address)
+  remote_handler.setLevel(logging.DEBUG)
+  remote_formatter = logging.Formatter(remote_format, datefmt=remote_date_format)
+  remote_handler.setFormatter(remote_formatter)
   logger.addHandler(remote_handler)
  logger.info("Logging initialized. PID: %d" % os.getpid())
  return logger
