@@ -45,9 +45,9 @@ def setup_logging(console_level=logging.INFO, error_log=None, debug_log=None, me
   console_handler = create_handler(level=console_level, handler_class=logging.StreamHandler, formatter=formatter)
  if error_log and log_crashes:
   crashlogger.enable_crashlogger(error_handler)
- remote_format = "1 %(asctime)s - " + application_name + " - - %(name)s thread %(thread)d %(module)s.%(funcName)s:\n%(message)s"
- remote_date_format = '%Y-%m-%dT%H:%M:%SZ'
  if remote_address:
+  remote_format = "1 %(asctime)s - " + application_name + " - - %(name)s thread %(thread)d %(module)s.%(funcName)s:\n%(message)s"
+  remote_date_format = '%Y-%m-%dT%H:%M:%SZ'
   remote_handler = logging.handlers.SysLogHandler(address=remote_address)
   remote_handler.setLevel(logging.WARNING)
   remote_formatter = logging.Formatter(remote_format, datefmt=remote_date_format)
