@@ -1,10 +1,12 @@
+from __future__ import absolute_import
+from future.builtins import str
 import logging
 import logging.handlers
 import sys
 import os
 import traceback
 
-import crashlogger
+from . import crashlogger
 
 MESSAGE_FORMAT = "%(levelname)s %(name)s thread %(thread)d %(module)s.%(funcName)s %(asctime)s:\n%(message)s"
 
@@ -32,7 +34,7 @@ def custom_excepthook(type, value, thrown_traceback):
  logger.error("An unhandled exception occurred.\n%s" % tb)
  sys.__excepthook__(type, value, thrown_traceback)
 
-def setup_logging(console_level=logging.INFO, error_log=None, debug_log=None, message_format=MESSAGE_FORMAT, log_unhandled_exceptions=True, log_crashes=True, application_name=None, application_version=None, remote_address=None, remote_level=logging.WARNING):
+def setup_logging(console_level=logging.INFO, error_log=None, debug_log=None, message_format=MESSAGE_FORMAT, log_unhandled_exceptions=True, log_crashes=True, application_name=None, application_version=None, remote_address=None, remote_level=logging.ERROR):
  if log_unhandled_exceptions:
   sys.excepthook = custom_excepthook
  logger.setLevel(logging.DEBUG)
