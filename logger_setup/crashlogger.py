@@ -1,3 +1,4 @@
+from future.builtins import object
 import logging
 import faulthandler
 
