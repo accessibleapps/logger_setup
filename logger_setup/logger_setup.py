@@ -1,5 +1,4 @@
 from __future__ import absolute_import
-from future.builtins import str
 import logging
 import logging.handlers
 import sys
@@ -9,8 +8,6 @@ import traceback
 from . import crashlogger
 
 MESSAGE_FORMAT = "%(levelname)s %(name)s thread %(thread)d %(module)s.%(funcName)s %(asctime)s:\n%(message)s"
-
-
 
 
 try:
@@ -48,7 +45,7 @@ def setup_logging(console_level=logging.INFO, error_log=None, debug_log=None, me
  if error_log and log_crashes:
   crashlogger.enable_crashlogger(error_handler)
  if remote_address:
-  remote_format = "1 %(asctime)s - " + application_name + " - - version: " + str(application_version) + " thread: %(thread)d function: %(module)s.%(funcName)s:\n%(message)s"
+  remote_format = "1 %(asctime)s - " + application_name + " - - version: %s"% application_version + " thread: %(thread)d function: %(module)s.%(funcName)s:\n%(message)s"
   remote_date_format = '%Y-%m-%dT%H:%M:%SZ'
   remote_handler = logging.handlers.SysLogHandler(address=remote_address)
   remote_handler.setLevel(remote_level)
