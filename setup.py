@@ -3,9 +3,9 @@ from setuptools import setup, find_packages
 
 install_requires = []
 if sys.version_info[0] < 3:
- install_requires.append('faulthandler')
+ install_requires.append('faulthandler==2.6')
 
-__version__ = 0.13
+__version__ = 0.14
 __doc__ = """Collects log setup and handling from all projects into one central place."""
 __author__ = 'Q'
 
@@ -19,7 +19,7 @@ setup(
  packages = find_packages(),
  install_requires = install_requires,
  classifiers = [
-  'Development Status :: 3 - Alpha',
+  'Development Status :: 4 - beta',
   'Intended Audience :: Developers',
   'Programming Language :: Python',
   'License :: OSI Approved :: MIT License',
