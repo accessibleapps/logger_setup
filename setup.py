@@ -21,7 +21,7 @@ setup(
     packages=find_packages(),
     install_requires=install_requires,
     classifiers=[
-        "Development Status :: 4 - beta",
+        "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
         "Programming Language :: Python",
         "License :: OSI Approved :: MIT License",
