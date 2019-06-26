@@ -36,7 +36,7 @@ def create_handler(
 def custom_excepthook(type, value, thrown_traceback):
     tb = traceback.format_exception(type, value, thrown_traceback)
     tb = "".join(tb)
-    logger.error("An unhandled exception occurred.\n%s" % tb)
+    logger.error("An unhandled exception occurred.\n%s", tb)
     sys.__excepthook__(type, value, thrown_traceback)
 
 
@@ -81,7 +81,7 @@ def setup_logging(
         remote_formatter = logging.Formatter(remote_format, datefmt=remote_date_format)
         remote_handler.setFormatter(remote_formatter)
         logger.addHandler(remote_handler)
-    logger.info("Logging initialized. PID: %d" % os.getpid())
+    logger.info("Logging initialized. PID: %d", os.getpid())
     return logger
 
 
