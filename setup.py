@@ -5,7 +5,7 @@ install_requires = []
 if sys.version_info[0] < 3:
     install_requires.append("faulthandler==2.6")
 
-__version__ = 0.14
+__version__ = "0.15"
 __doc__ = (
     """Collects log setup and handling from all projects into one central place."""
 )
