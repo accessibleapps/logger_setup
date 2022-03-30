@@ -1,3 +1,4 @@
+import io
 import sys
 from setuptools import setup, find_packages
 
@@ -5,7 +6,10 @@ install_requires = []
 if sys.version_info[0] < 3:
     install_requires.append("faulthandler==2.6")
 
-__version__ = "0.16"
+with io.open('README.rst', encoding='UTF-8') as readme:
+    long_description = readme.read()
+
+__version__ = "0.17"
 __doc__ = (
     """Collects log setup and handling from all projects into one central place."""
 )
@@ -17,6 +21,7 @@ setup(
     author=__author__,
     author_email="q@q-continuum.net",
     description=__doc__,
+    long_description=long_description,
     package_dir={"logger_setup": "logger_setup"},
     packages=find_packages(),
     install_requires=install_requires,
