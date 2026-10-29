@@ -4,6 +4,7 @@ import logging.handlers
 import sys
 import os
 import traceback
+import time
 
 from . import crashlogger
 
@@ -78,6 +79,7 @@ def setup_logging(
             )
             remote_date_format = "%Y-%m-%dT%H:%M:%SZ"
             remote_formatter = logging.Formatter(remote_format, datefmt=remote_date_format)
+            remote_formatter.converter = time.gmtime
             remote_handler = create_handler(
                 filename=None,
                 level=remote_level,
