@@ -27,9 +27,12 @@ def create_handler(
         handler = handler_class()
     else:
         handler = handler_class(filename, mode=handler_mode, encoding="utf-8")
-    handler.setLevel(level)
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
+    try:
+        handler.setLevel(level)
+        handler.setFormatter(formatter)
+    except BaseException:
+        handler.close()
+        raise
     return handler
 
 
@@ -52,35 +55,48 @@ def setup_logging(
     remote_address=None,
     remote_level=logging.ERROR,
 ):
+    formatter = logging.Formatter(message_format)
+    handlers = []
+    try:
+        if error_log:
+            error_handler = create_handler(error_log, logging.WARNING, formatter=formatter)
+            handlers.append(error_handler)
+        if debug_log:
+            handlers.append(create_handler(debug_log, logging.DEBUG, formatter=formatter))
+        if console_level:
+            handlers.append(create_handler(
+                level=console_level,
+                handler_class=logging.StreamHandler,
+                formatter=formatter,
+            ))
+        if remote_address:
+            remote_format = (
+                "1 %(asctime)s - "
+                + application_name
+                + " - - version: %s" % application_version
+                + " thread: %(thread)d function: %(module)s.%(funcName)s:\n%(message)s"
+            )
+            remote_date_format = "%Y-%m-%dT%H:%M:%SZ"
+            remote_formatter = logging.Formatter(remote_format, datefmt=remote_date_format)
+            remote_handler = create_handler(
+                filename=None,
+                level=remote_level,
+                handler_class=lambda: logging.handlers.SysLogHandler(address=remote_address),
+                formatter=remote_formatter,
+            )
+            handlers.append(remote_handler)
+        if error_log and log_crashes:
+            crashlogger.enable_crashlogger(error_handler)
+    except BaseException:
+        for handler in handlers:
+            handler.close()
+        raise
+
+    for handler in handlers:
+        logger.addHandler(handler)
+    logger.setLevel(logging.DEBUG)
     if log_unhandled_exceptions:
         sys.excepthook = custom_excepthook
-    logger.setLevel(logging.DEBUG)
-    formatter = logging.Formatter(message_format)
-    if error_log:
-        error_handler = create_handler(error_log, logging.WARNING, formatter=formatter)
-    if debug_log:
-        create_handler(debug_log, logging.DEBUG, formatter=formatter)
-    if console_level:
-        console_handler = create_handler(
-            level=console_level,
-            handler_class=logging.StreamHandler,
-            formatter=formatter,
-        )
-    if error_log and log_crashes:
-        crashlogger.enable_crashlogger(error_handler)
-    if remote_address:
-        remote_format = (
-            "1 %(asctime)s - "
-            + application_name
-            + " - - version: %s" % application_version
-            + " thread: %(thread)d function: %(module)s.%(funcName)s:\n%(message)s"
-        )
-        remote_date_format = "%Y-%m-%dT%H:%M:%SZ"
-        remote_handler = logging.handlers.SysLogHandler(address=remote_address)
-        remote_handler.setLevel(remote_level)
-        remote_formatter = logging.Formatter(remote_format, datefmt=remote_date_format)
-        remote_handler.setFormatter(remote_formatter)
-        logger.addHandler(remote_handler)
     logger.info("Logging initialized. PID: %d", os.getpid())
     return logger
 
