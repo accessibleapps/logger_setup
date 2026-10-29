@@ -16,6 +16,9 @@ try:
 except NameError:
     logger = logging.getLogger()
 
+_handlers = []
+_previous_excepthook = None
+
 
 def create_handler(
     filename=None,
@@ -56,6 +59,7 @@ def setup_logging(
     remote_address=None,
     remote_level=logging.ERROR,
 ):
+    global _handlers, _previous_excepthook
     formatter = logging.Formatter(message_format)
     handlers = []
     try:
@@ -96,13 +100,33 @@ def setup_logging(
 
     for handler in handlers:
         logger.addHandler(handler)
+    # The fault handler must stop using an old stream before that stream closes.
+    if not (error_log and log_crashes):
+        crashlogger.disable_crashlogger()
+    for handler in _handlers:
+        logger.removeHandler(handler)
+        handler.close()
+    _handlers = handlers
     logger.setLevel(logging.DEBUG)
     if log_unhandled_exceptions:
+        if sys.excepthook is not custom_excepthook:
+            _previous_excepthook = sys.excepthook
         sys.excepthook = custom_excepthook
+    elif sys.excepthook is custom_excepthook:
+        sys.excepthook = _previous_excepthook
+        _previous_excepthook = None
     logger.info("Logging initialized. PID: %d", os.getpid())
     return logger
 
 
 def shutdown():
+    global _handlers, _previous_excepthook
     crashlogger.disable_crashlogger()
+    for handler in _handlers:
+        logger.removeHandler(handler)
+        handler.close()
+    _handlers = []
+    if sys.excepthook is custom_excepthook:
+        sys.excepthook = _previous_excepthook
+        _previous_excepthook = None
     logging.shutdown()
