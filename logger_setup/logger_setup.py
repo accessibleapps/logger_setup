@@ -86,4 +86,5 @@ def setup_logging(
 
 
 def shutdown():
+    crashlogger.disable_crashlogger()
     logging.shutdown()

@@ -1,21 +1,22 @@
-import logging
+import atexit
 import faulthandler
 
-CRASHLOGGER_NAME = "APPCRASH"
-
-
-class StreamToLogger(object):
-    """
- Fake file-like stream object that redirects writes to a logger instance.
- """
-
-    def __init__(self, handler):
-        self.handler = handler
-
-    def fileno(self):
-        return self.handler.stream.fileno()
+_enabled = False
 
 
 def enable_crashlogger(error_handler):
-    stream = StreamToLogger(error_handler)
-    faulthandler.enable(stream)
+    global _enabled
+    faulthandler.enable(error_handler.stream)
+    _enabled = True
+
+
+def disable_crashlogger():
+    global _enabled
+    if _enabled:
+        faulthandler.disable()
+        _enabled = False
+
+
+# logging registers its shutdown before importing this module. Exit callbacks
+# run in reverse order, so release the fault descriptor before logs are closed.
+atexit.register(disable_crashlogger)
