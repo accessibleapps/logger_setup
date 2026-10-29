@@ -26,7 +26,7 @@ def create_handler(
     if filename is None:
         handler = handler_class()
     else:
-        handler = handler_class(filename, mode=handler_mode)
+        handler = handler_class(filename, mode=handler_mode, encoding="utf-8")
     handler.setLevel(level)
     handler.setFormatter(formatter)
     logger.addHandler(handler)
